@@ -21,8 +21,3 @@ for c in cat_columns:
 lgb_reg.fit(X_train, y_train)
 lgb_pred = lgb_reg.predict(X_test)
 submission['price'] = lgb_pred
-
-# 분류일 경우
-# lgb_clf.fit(X_train, y_train)
-# y_pred = lgb_clf.predict(X_val)
-# accuracy_score(y_val, y_pred)
