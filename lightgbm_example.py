@@ -5,13 +5,14 @@ import lightgbm as lgb
 df = pd.read_csv('student-por.csv', sep=';') #sep=';' 정렬된 데이터는 생략 가능
 df.head()
 
-y = train.iloc[:, -1]
-X = train.iloc[:, :-1]
+y = train.iloc[:, -1] #target, target이 여러개면 숫자 변경
+X = train.iloc[:, :-1] #data
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
 lgb_reg = lgb.LGBMRegressor(random_state=42)
 cat_columns = X_train.columns[X_train.dtypes==object].tolist()
 
+#object type 데이터 category로 변경
 for c in cat_columns:
     X_train[c] = X_train[c].astype('category')
     X_test[c] = X_test[c].astype('category')
