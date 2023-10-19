@@ -10,7 +10,7 @@ X = train.iloc[:, :-1] #data
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
 lgb_reg = lgb.LGBMRegressor(random_state=42)
-# lgb_clf = lgb.LGBMClassifier(num_leaves=31, objective='binary') #분류일 경우
+# lgb_clf = lgb.LGBMClassifier(n_estimators=400) #분류일 경우
 cat_columns = X_train.columns[X_train.dtypes==object].tolist()
 
 #object type 데이터 category로 변경
