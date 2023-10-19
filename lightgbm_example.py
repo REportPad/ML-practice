@@ -10,6 +10,7 @@ X = train.iloc[:, :-1] #data
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
 lgb_reg = lgb.LGBMRegressor(random_state=42)
+# lgb_clf = lgb.LGBMClassifier(num_leaves=31, objective='binary') #분류일 경우
 cat_columns = X_train.columns[X_train.dtypes==object].tolist()
 
 #object type 데이터 category로 변경
@@ -20,3 +21,8 @@ for c in cat_columns:
 lgb_reg.fit(X_train, y_train)
 lgb_pred = lgb_reg.predict(X_test)
 submission['price'] = lgb_pred
+
+# 분류일 경우
+# lgb_clf.fit(X_train, y_train)
+# y_pred = lgb_clf.predict(X_val)
+# accuracy_score(y_val, y_pred)
