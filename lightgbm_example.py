@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import lightgbm as lgb
 
-df = pd.read_csv('student-por.csv', sep=';') #sep=';' 정렬된 데이터는 생략 가능
+df = pd.read_csv('student-por.csv') #sep=';' 정렬된 데이터는 생략 가능
 df.head()
 
 y = train.iloc[:, -1] #target, target이 여러개면 숫자 변경
