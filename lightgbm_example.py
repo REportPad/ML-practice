@@ -23,4 +23,5 @@ for c in cat_columns:
 
 lgb_reg.fit(X_train, y_train)
 lgb_pred = lgb_reg.predict(X_test)
+submission = pd.read_csv('titanic/submission.csv')
 submission['price'] = lgb_pred
