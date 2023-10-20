@@ -6,7 +6,11 @@ train_data = pd.read_csv('titanic/train.csv') #sep=';' 정렬된 데이터는 �
 #train_data.head()
 test_data = pd.read_csv('titanic/test.csv') #sep=';' 정렬된 데이터는 생략 가능
 #train_data.head()
+test_data = pd.read_csv('titanic/test.csv')
 
+train_data.columns
+train_data = train_data[['PassengerId', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp',
+       'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked','Survived']]
 
 #열 순서를 변경하고 싶으면
 #train_data.columns 입력하여 열 이름을 얻은 후
