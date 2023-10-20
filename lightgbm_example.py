@@ -3,10 +3,14 @@ from sklearn.model_selection import train_test_split
 import lightgbm as lgb
 
 train_data = pd.read_csv('titanic/train.csv') #sep=';' 정렬된 데이터는 생략 가능
-train_data.head()
+#train_data.head()
+test_data = pd.read_csv('titanic/test.csv') #sep=';' 정렬된 데이터는 생략 가능
+#train_data.head()
+
+
 #열 순서를 변경하고 싶으면
-#df.columns 입력하여 열 이름을 얻은 후
-#df = df[[~]] 형태로 열 이름을 재배치함
+#train_data.columns 입력하여 열 이름을 얻은 후
+#train_data = train_data[[~]] 형태로 열 이름을 재배치함
 
 y = train_data.iloc[:, -1] #target, target이 여러개면 숫자 변경
 X = train_data.iloc[:, :-1] #data
