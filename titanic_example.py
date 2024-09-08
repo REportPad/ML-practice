@@ -1,14 +1,9 @@
-#1. 데이터 탐색 및 전처리
-# 1) 결측값 확인:평균,중앙,최빈
-# 2) 범주형 변수는 숫자로 변환,
-# 3) 불필요한 열 제거
+#1. EDA & Feature Engineering
 import pandas as pd
 
-# 데이터 불러오기
 train = pd.read_csv('sample_data/train.csv')
 test = pd.read_csv('sample_data/test.csv')
 
-# 데이터 정보 확인
 print(train.info())
 print(test.info())
 # print(train.describe())
@@ -61,7 +56,6 @@ y_pred = xgb_model.predict(X_val) # 검증 데이터 예측
 # 성능 평가
 accuracy = accuracy_score(y_val, y_pred)
 print(f"Validation Accuracy: {accuracy:.4f}")
-
 
 # 3. 예측 및 제출 파일 생성
 # 테스트 데이터 전처리 (학습 데이터와 동일한 방식으로 처리)
