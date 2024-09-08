@@ -1,4 +1,4 @@
-#1. 데이터 탐색 (EDA: Exploratory Data Analysis)
+#1. 데이터 탐색 및 전처리
 # 1) 결측값 확인:평균,중앙,최빈
 # 2) 범주형 변수는 숫자로 변환,
 # 3) 불필요한 열 제거
@@ -39,6 +39,7 @@ y = train_data['Survived']
 # 학습 데이터와 검증 데이터로 분리
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
+#2. 모델 선택 및 학습
 import xgboost as xgb
 from sklearn.metrics import accuracy_score
 
@@ -55,13 +56,14 @@ xgb_model.fit(X_train, y_train,
               eval_set=[(X_val, y_val)],    # 검증 데이터 설정
               verbose=False)
 
-# 검증 데이터 예측
-y_pred = xgb_model.predict(X_val)
+y_pred = xgb_model.predict(X_val) # 검증 데이터 예측
 
 # 성능 평가
 accuracy = accuracy_score(y_val, y_pred)
 print(f"Validation Accuracy: {accuracy:.4f}")
 
+
+# 3. 예측 및 제출 파일 생성
 # 테스트 데이터 전처리 (학습 데이터와 동일한 방식으로 처리)
 test_data['Age'].fillna(test_data['Age'].median(), inplace=True)
 test_data['Fare'].fillna(test_data['Fare'].median(), inplace=True)
@@ -71,14 +73,9 @@ test_data['Cabin'] = test_data['Cabin'].fillna('Unknown')
 test_data['Has_Cabin'] = test_data['Cabin'].apply(lambda x: 0 if x == 'Unknown' else 1)
 test_data = test_data.drop(['Ticket', 'Name', 'Cabin'], axis=1)
 
-# PassengerId를 따로 저장 (최종 제출을 위해)
-passenger_id = test_data['PassengerId']
-
-# Feature 추출
-X_test = test_data.drop('PassengerId', axis=1)
-
-# 최종 예측
-test_pred = xgb_model.predict(X_test)
+passenger_id = test_data['PassengerId'] # PassengerId를 따로 저장 (최종 제출을 위해)
+X_test = test_data.drop('PassengerId', axis=1)# Feature 추출
+test_pred = xgb_model.predict(X_test)# 최종 예측
 
 # 결과를 DataFrame으로 저장
 submission = pd.DataFrame({
@@ -86,6 +83,4 @@ submission = pd.DataFrame({
     'Survived': test_pred
 })
 
-# 결과 저장
-submission.to_csv('submission.csv', index=False)
-
+submission.to_csv('submission.csv', index=False)# 결과 저장
