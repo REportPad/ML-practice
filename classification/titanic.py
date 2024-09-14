@@ -34,22 +34,64 @@ y = train['Survived']
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
 #2. 모델 선택 및 학습
-import xgboost as xgb
-xgb_model = xgb.XGBClassifier(n_estimators=100, learning_rate=0.05, max_depth=4, random_state=42)# XGBoost 모델 학습
-xgb_model.fit(X_train, y_train)
-y_pred = xgb_model.predict(X_valid)
+from sklearn.ensemble import VotingClassifier
+from lightgbm import LGBMClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 
-from sklearn.metrics import accuracy_score
-accuracy = accuracy_score(y_valid, y_pred)
-print(f'검증 데이터 정확도: {accuracy * 100:.2f}%')
+xgb_model = xgb.XGBClassifier()
+cat_model = CatBoostClassifier()
+lgbm = LGBMClassifier()
+log_clf = LogisticRegression()
+dt_clf = DecisionTreeClassifier()
+svc_clf = SVC(probability=True)
+
+# Voting 앙상블
+ensemble_model = VotingClassifier(
+    estimators=[
+    ('xgb', xgb_model),
+    ('cat', cat_model),
+    ('lgbm', lgbm),
+    ('lr', log_clf), 
+    ('dt', dt_clf), 
+    ('svc', svc_clf)], 
+    voting='soft')  # soft voting을 통해 확률 평균 사용
+
+# 모델 학습
+ensemble_model.fit(X_train, y_train)
+
+# 예측 및 성능 평가
+y_pred = ensemble_model.predict(X_valid)
+print(f"Accuracy: {accuracy_score(y_valid, y_pred)}")
+
+# 테스트 데이터 예측
+X_test = test.drop('PassengerId', axis=1)
+test_pred = ensemble_model.predict(X_test)
+
+# 제출 파일 생성
+submission = pd.DataFrame({
+    'PassengerId': test['PassengerId'],
+    'Survived': test_pred
+})
+submission.to_csv('submission_en.csv', index=False)
+
+# import xgboost as xgb
+# xgb_model = xgb.XGBClassifier(n_estimators=100, learning_rate=0.05, max_depth=4, random_state=42)# XGBoost 모델 학습
+# xgb_model.fit(X_train, y_train)
+# y_pred = xgb_model.predict(X_valid)
+
+# from sklearn.metrics import accuracy_score
+# accuracy = accuracy_score(y_valid, y_pred)
+# print(f'검증 데이터 정확도: {accuracy * 100:.2f}%')
 
 # 3. 예측
-X_test = test.drop('PassengerId', axis=1)
-predictions = xgb_model.predict(X_test)
+# X_test = test.drop('PassengerId', axis=1)
+# predictions = xgb_model.predict(X_test)
 
 # 4. 제출 파일 생성
-submission = pd.DataFrame({
-    "PassengerId": test['PassengerId'],
-    "Survived": predictions
-})
-submission.to_csv('submission.csv', index=False)
+# submission = pd.DataFrame({
+#     "PassengerId": test['PassengerId'],
+#     "Survived": predictions
+# })
+# submission.to_csv('submission.csv', index=False)
