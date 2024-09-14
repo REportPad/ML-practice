@@ -31,16 +31,18 @@ test['Fare'].fillna(test['Fare'].mean(), inplace=True)
 from sklearn.model_selection import train_test_split
 X = train.drop('Survived', axis=1)
 y = train['Survived']
-X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 #2. 모델 선택 및 학습
+#!pip install catboost
 from sklearn.ensemble import VotingClassifier
+from xgboost import XGBClassifier
+from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
-
-xgb_model = xgb.XGBClassifier()
+xgb_model = XGBClassifier()
 cat_model = CatBoostClassifier()
 lgbm = LGBMClassifier()
 log_clf = LogisticRegression()
