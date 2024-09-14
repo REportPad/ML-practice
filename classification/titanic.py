@@ -23,6 +23,10 @@ train['Embarked'] = label_encoder.fit_transform(train['Embarked'])
 # 불필요한 'Ticket', 'Name' 등 제거
 train = train.drop(['Ticket', 'Name', 'Cabin'], axis=1)
 
+#결측값 평균으로 대체
+train['Age'].fillna(train['Age'].mean(), inplace=True)
+test['Fare'].fillna(test['Fare'].mean(), inplace=True)
+
 # Feature와 Target 설정
 from sklearn.model_selection import train_test_split
 X = train.drop('Survived', axis=1)
