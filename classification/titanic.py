@@ -1,16 +1,21 @@
 #1. EDA & Feature Engineering
 import pandas as pd
+train = pd.read_csv('train.csv')
+test = pd.read_csv('test.csv')
 
-train = pd.read_csv('sample_data/train.csv')
-test = pd.read_csv('sample_data/test.csv')
-
-print(train.info())
-print(test.info())
+# print(train.info())
+# print(test.info())
 # print(train.describe())
 
 # 1) 결측값 확인
-print(train.isnull().sum())
-print(test.isnull().sum())
+missing_values = train.isnull().sum()
+missing_values_sorted = missing_values.sort_values(ascending=False)
+print(missing_values_sorted)
+
+missing_values = test.isnull().sum()
+missing_values_sorted = missing_values.sort_values(ascending=False)
+print(missing_values_sorted)
+
 # 결측값 채우기
 # 결측치 처리 예시 (Age와 Embarked)
 train_data['Age'].fillna(train_data['Age'].median(), inplace=True)
