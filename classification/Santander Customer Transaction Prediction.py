@@ -24,20 +24,18 @@ params = {
     'boosting_type': 'gbdt',
     'objective': 'binary',
     'metric': 'auc',
-    'learning_rate': 0.05,
-    'num_leaves': 31,
-    'feature_fraction': 0.9,
-    'bagging_fraction': 0.8,
-    'bagging_freq': 5,
-    'verbose': 0
+    'learning_rate': 0.05,#?
+    'num_leaves': 31,#?
+    'feature_fraction': 0.9,#?
+    'bagging_fraction': 0.8,#?
+    'bagging_freq': 5,#?
+    'verbose': 0#?
 }
 
 # 모델 학습
 gbm = lgb.train(params,
                 lgb_train,
                 num_boost_round=1000,
-                valid_sets=lgb_eval,
-                # early_stopping_rounds=50
                 )
 
 # 예측 및 AUC 평가
