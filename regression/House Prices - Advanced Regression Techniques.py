@@ -2,33 +2,44 @@ import pandas as pd
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 
-#결측값 내림차순 출력
-missing_cols = train.isnull().sum()
-missing_cols = missing_cols[missing_cols > 0].sort_values(ascending=False)
-print(missing_cols)
+#object type labeling
+object_cols = train.select_dtypes(include=['object'])  # object 타입 열 선택
+from sklearn.preprocessing import LabelEncoder
+label_encoder = LabelEncoder()
+for col in object_cols:
+  train[col] = label_encoder.fit_transform(train[col])
 
-#결측값 과반수 이상은 제거
-train = train.drop(['PoolQC','MiscFeature','Alley','Fence','MasVnrType'], axis=1)
-test = test.drop(['PoolQC','MiscFeature','Alley','Fence','MasVnrType'], axis=1)
+object_cols = test.select_dtypes(include=['object'])  # object 타입 열 선택
+for col in object_cols:
+  test[col] = label_encoder.fit_transform(test[col])
 
-#결측값 object type 처리
-# object 타입의 열 출력
-object_columns = train.select_dtypes(include=['object']).columns
-print(object_columns)
+#data split
+from sklearn.model_selection import train_test_split
+X = train.drop(['SalePrice', 'Id'], axis=1)
+y = train['SalePrice']
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 결측값을 'Unknown'으로 대체
-for col in object_columns:
-    train[col].fillna('Unknown', inplace=True)
-    test[col].fillna('Unknown', inplace=True)
+import lightgbm as lgb
+train_data = lgb.Dataset(X_train, label=y_train)
+valid_data = lgb.Dataset(X_valid, label=y_valid)
+lgb_regressor = lgb.LGBMRegressor(
+    num_leaves=31,          # 트리의 리프 노드 수 (작을수록 과적합 방지)
+    learning_rate=0.05,     # 학습률
+    n_estimators=1000       # 부스팅 반복 횟수
+)
+lgb_regressor.fit(X_train, y_train, eval_set=[(X_valid, y_valid)])
 
-# pandas의 get_dummies를 사용한 One-Hot Encoding
-train = pd.get_dummies(train, columns=object_columns)
-test = pd.get_dummies(test, columns=object_columns)
+from sklearn.metrics import mean_squared_error
+y_pred = lgb_regressor.predict(X_valid)# 테스트 데이터에 대한 예측
+mse = mean_squared_error(y_valid, y_pred)# 모델 성능 평가 (평균 제곱 오차)
+print(f'Mean Squared Error: {mse}')
 
-# train과 test의 열이 일치하도록 정렬 (필수 단계)
-train, test = train.align(test, join='left', axis=1, fill_value=0)
+#test data prediction
+X_test = test.drop('Id', axis=1)
+test_pred = lgb_regressor.predict(X_test)
 
-#결측값 수치형 처리
-# 수치형 변수의 결측값을 중앙값으로 대체
-train.fillna(train.median(), inplace=True)
-test.fillna(test.median(), inplace=True)
+submission = pd.DataFrame({
+    'Id': test['Id'],         # ID 열 추가
+    'SalePrice': test_pred    # 예측 값 열 추가
+})
+submission.to_csv('submission_0916.csv', index=False)
