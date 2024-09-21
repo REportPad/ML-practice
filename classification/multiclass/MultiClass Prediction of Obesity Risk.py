@@ -77,11 +77,11 @@ lgbm = lgb.LGBMClassifier(objective='multiclass',
 # 하이퍼파라미터 공간 설정
 #최적 하이퍼파라미터: {'num_leaves': 20, 'n_estimators': 300, 'min_child_samples': 30, 'max_depth': 5, 'learning_rate': 0.05}
 param_dist = {
-    'num_leaves': [10, 20, 31],            # 리프 노드 수(31)
-    'n_estimators': [200, 300, 400],     # 트리 개수 (100)
-    'min_child_samples': [20,30,40],         # 최소 리프 노드 샘플 수 (20)
-    'max_depth': [3, 5, 10],             # 트리 깊이 (-1)
-    'learning_rate': [0.01,0.05, 0.1],        # 학습률 (0.1)
+    'num_leaves': [20, 31, 40],            # 리프 노드 수(31)
+    'n_estimators': [100, 200, 300],     # 트리 개수 (100)
+    'min_child_samples': [10,20,30],         # 최소 리프 노드 샘플 수 (20)
+    'max_depth': [5, 10, 20],             # 트리 깊이 (-1)
+    'learning_rate': [0.05, 0.1, 0.2],        # 학습률 (0.1)
 }
 
 # 4. RandomizedSearchCV 설정
