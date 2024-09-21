@@ -41,27 +41,27 @@ params = {
 }
 
 # 모델 학습
-model = lgb.train(params, train_data, valid_sets=[test_data], num_boost_round=1000)
-
 import numpy as np
-y_pred = model.predict(X_test)
-y_pred_classes = np.argmax(y_pred, axis=1)
+model = lgb.LGBMClassifier(
+    objective='multiclass', 
+    num_class=len(np.unique(y)),
+    num_leaves=31,          # 트리의 리프 노드 수 (작을수록 과적합 방지)
+    learning_rate=0.05,     # 학습률
+    n_estimators=1000       # 부스팅 반복 횟수
+    )
+model.fit(X_train, y_train)
 
 # 정확도 및 성능 평가
 from sklearn.metrics import accuracy_score
-accuracy = accuracy_score(y_test, y_pred_classes)
-print(f"Accuracy: {accuracy}")
-
-from sklearn.metrics import classification_report
-print(classification_report(y_test, y_pred_classes))
+y_pred = model.predict(X_test)
+acc = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {acc}")
 
 #test data prediction
-test_drop = test.drop('id', axis=1)
-test_pred_prob = model.predict(test_drop)
-test_pred = np.argmax(test_pred_prob, axis=1)
+test_drop_id = test.drop('id', axis=1)
+test_pred = model.predict(test_drop_id)
 test_pred_original = label_encoder_target.inverse_transform(test_pred)
 
-#create submission file
 submission = pd.DataFrame({
     'id': test['id'],         # ID 열 추가
     'NObeyesdad': test_pred_original    # 예측 값 열 추가
