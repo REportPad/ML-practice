@@ -67,3 +67,57 @@ submission = pd.DataFrame({
     'NObeyesdad': test_pred_original    # 예측 값 열 추가
 })
 submission.to_csv('submission_0921.csv', index=False)
+
+##hypterparameter tuning
+# LightGBM 모델 초기화
+lgbm = lgb.LGBMClassifier(objective='multiclass', 
+    num_class=len(np.unique(y)),
+                          )
+
+# 하이퍼파라미터 공간 설정
+#최적 하이퍼파라미터: {'num_leaves': 20, 'n_estimators': 300, 'min_child_samples': 30, 'max_depth': 5, 'learning_rate': 0.05}
+param_dist = {
+    'num_leaves': [10, 20, 31],            # 리프 노드 수(31)
+    'n_estimators': [200, 300, 400],     # 트리 개수 (100)
+    'min_child_samples': [20,30,40],         # 최소 리프 노드 샘플 수 (20)
+    'max_depth': [3, 5, 10],             # 트리 깊이 (-1)
+    'learning_rate': [0.01,0.05, 0.1],        # 학습률 (0.1)
+}
+
+# 4. RandomizedSearchCV 설정
+from sklearn.model_selection import RandomizedSearchCV
+random_search = RandomizedSearchCV(
+    estimator=lgbm,
+    param_distributions=param_dist,   # 파라미터 분포
+    n_iter=10,                        # 시도할 파라미터 조합 수
+    scoring='accuracy',               # 평가 지표
+    cv=3,                             # 교차 검증 횟수
+    verbose=1,                        # 출력 레벨
+    random_state=42,                  # 랜덤 시드
+    n_jobs=-1                         # 병렬 처리
+)
+
+# 5. RandomizedSearchCV 학습
+random_search.fit(X_train, y_train)
+
+# 6. 최적 하이퍼파라미터 출력
+print(f"최적 하이퍼파라미터: {random_search.best_params_}")
+
+# 7. 테스트 데이터로 최적 모델 평가
+best_model = random_search.best_estimator_
+y_pred = best_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"테스트 데이터 정확도: {accuracy}")
+
+
+#test data prediction
+test_drop_id = test.drop('id', axis=1)
+test_pred = best_model.predict(test_drop_id)
+test_pred_original = label_encoder_target.inverse_transform(test_pred)
+
+submission = pd.DataFrame({
+    'id': test['id'],         # ID 열 추가
+    'NObeyesdad': test_pred_original    # 예측 값 열 추가
+})
+submission.to_csv('submission_best_0921.csv', index=False)
+
