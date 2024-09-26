@@ -21,9 +21,9 @@ lgb_eval = lgb.Dataset(X_test, y_test, reference=lgb_train)
 
 # 하이퍼파라미터 설정
 params = {
-    'boosting_type': 'gbdt',
     'objective': 'binary',
     'metric': 'auc',
+    'boosting_type': 'gbdt',
     'learning_rate': 0.05,#?
     'num_leaves': 31,#?
     'feature_fraction': 0.9,#?
