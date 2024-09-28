@@ -11,7 +11,7 @@
 
 [default value(lightgbm)]  
 learning_rate: 0.1  
-num_leaves: 31  
-max_depth: -1  
 n_estimators: 100  
+num_leaves: 31  
 min_data_in_leaf: 20
+max_depth: -1  
