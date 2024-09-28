@@ -25,21 +25,6 @@ import lightgbm as lgb
 train_data = lgb.Dataset(X_train, label=y_train)
 test_data = lgb.Dataset(X_test, label=y_test,reference=train_data)
 
-# 모델 파라미터 설정
-#[LightGBM] [Warning] No further splits with positive gain, best gain: -inf 발생할 경우,
-#min_data_in_leaf 값을 낮추기
-#num_leaves 값을 증가시키기
-params = {
-    'objective': 'multiclass',
-    'num_class': len(np.unique(y)),  # 클래스 개수
-    'metric': 'multi_logloss',
-    'boosting_type': 'gbdt',#default
-    'learning_rate': 0.05,
-    'num_leaves': 31,#default
-    'max_depth': -1,#default
-    'random_state': 42
-}
-
 # 모델 학습
 import numpy as np
 model = lgb.LGBMClassifier(
