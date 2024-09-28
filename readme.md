@@ -1,4 +1,4 @@
-[for ML study]
+#[for ML study]
 learning_rate: 학습률은 모델의 학습 속도와 성능을 크게 좌우합니다. 0.01에서 0.1 사이의 값을 주로 사용하며, 작을수록 더 많은 트리(n_estimators)가 필요합니다.
 n_estimators: 부스팅 과정에서 생성할 트리의 개수를 결정합니다. learning_rate가 낮을수록 트리 개수를 늘리는 것이 좋습니다.
 *작은 learning_rate, 큰 n_estimators가 더 자주 사용됩니다. 이 방식은 모델이 더 천천히, 그러나 안정적으로 학습하도록 하여 과적합을 방지합니다.
