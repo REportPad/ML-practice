@@ -30,9 +30,7 @@ import numpy as np
 model = lgb.LGBMClassifier(
     objective='multiclass', 
     num_class=len(np.unique(y)),
-    num_leaves=31,          # 트리의 리프 노드 수 (작을수록 과적합 방지)
-    learning_rate=0.05,     # 학습률
-    n_estimators=1000       # 부스팅 반복 횟수
+    random_state = 42
     )
 model.fit(X_train, y_train)
 
