@@ -8,3 +8,10 @@
 5. min_data_in_leaf: 리프 노드에 있는 최소 데이터 수로, 과적합을 방지하는 데 중요한 역할을 합니다. 작은 값은 모델이 세부 사항을 더 학습하게 만들고, 큰 값은 모델이 단순화됩니다.
 6. max_depth: 트리의 최대 깊이를 제한하여 과적합을 방지할 수 있습니다. 기본값은 -1로 제한이 없지만, 트리의 복잡도를 제한하고 싶다면 적절한 값을 설정하세요.  
 ※일반적으로, num_leaves는 2^(max_depth)보다 작게 설정하는 것이 좋습니다. 예를 들어, max_depth=6이라면 num_leaves는 64 이하로 설정합니다.
+
+[default value]  
+learning_rate: 0.1  
+num_leaves: 31  
+max_depth: -1  
+n_estimators: 100  
+min_data_in_leaf: 20
