@@ -33,10 +33,10 @@ params = {
     'objective': 'multiclass',
     'num_class': len(np.unique(y)),  # 클래스 개수
     'metric': 'multi_logloss',
-    'boosting_type': 'gbdt',
+    'boosting_type': 'gbdt',#default
     'learning_rate': 0.05,
-    'num_leaves': 31,
-    'max_depth': -1,
+    'num_leaves': 31,#default
+    'max_depth': -1,#default
     'random_state': 42
 }
 
