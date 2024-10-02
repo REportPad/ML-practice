@@ -4,7 +4,7 @@ train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 
 #object type labeling
-object_cols = test.select_dtypes(include=['object'])  # object 타입 열 선택
+object_cols = test.select_dtypes(include=['object']).columns  # object 타입 열 선택
 from sklearn.preprocessing import LabelEncoder
 label_encoder = LabelEncoder()
 for col in object_cols:
