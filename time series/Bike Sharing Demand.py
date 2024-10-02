@@ -1,10 +1,10 @@
-import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import mean_squared_log_error
 import lightgbm as lgb
 
 # 데이터 로드
+import pandas as pd
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 
