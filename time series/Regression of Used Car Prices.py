@@ -2,9 +2,17 @@ import pandas as pd
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 
+# print(len(train['fuel_type'].unique()))
+# print(train['fuel_type'].unique())
+# print(len(test['fuel_type'].unique()))
+# print(test['fuel_type'].unique())
+
+# '–'를 NaN으로 변경
+train['fuel_type'].replace('–', np.nan, inplace=True)
+test['fuel_type'].replace('–', np.nan, inplace=True)
+
 #object type labeling
 object_cols = test.select_dtypes(include=['object']).columns  # object 타입 열 선택
-# print(object_cols)
 from sklearn.preprocessing import LabelEncoder
 label_encoder = LabelEncoder()
 for col in object_cols:
