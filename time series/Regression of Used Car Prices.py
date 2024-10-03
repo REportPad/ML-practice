@@ -23,23 +23,21 @@ lgbm = lgb.LGBMRegressor()
 # 하이퍼파라미터 공간 정의
 import numpy as np
 param_dist = {
-    'num_leaves': np.arange(20, 150, 10),
-    'learning_rate': [0.01, 0.05, 0.1, 0.15, 0.2],
-    'n_estimators': np.arange(100, 1000, 100),
-    'max_depth': np.arange(3, 15, 1)
+    'num_leaves': [8, 15, 31, 62, 124],         # 리프 노드 수(31)
+    'n_estimators': [100, 200, 400, 700, 1000],  # 트리 개수 (100)
+    'min_child_samples': [10, 20, 40, 80, 160], # 최소 리프 노드 샘플 수 (20)
+    'learning_rate': [0.03, 0.05, 0.1, 0.2, 0.3], # 학습률 (0.1, <= 0.3)
 }
-
 # RandomizedSearchCV 설정
 from sklearn.model_selection import RandomizedSearchCV
 random_search = RandomizedSearchCV(lgbm, 
                                    param_distributions=param_dist, 
-                                   n_iter=20, 
+                                   n_iter=30, 
                                    scoring='neg_mean_squared_log_error', 
-                                   cv=5, 
+                                   cv=3, 
                                    verbose=1, 
                                    random_state=42, 
                                    n_jobs=-1)
-
 # 학습
 random_search.fit(X_train, y_train)
 
